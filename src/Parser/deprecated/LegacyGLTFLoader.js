@@ -1095,6 +1095,7 @@ threeExamples.LegacyGLTFLoader = ( function () {
 							if ( texture.name !== undefined ) _texture.name = texture.name;
 
 							_texture.format = texture.format !== undefined ? WEBGL_TEXTURE_FORMATS[ texture.format ] : THREE.RGBAFormat;
+							// _texture.format = texture.format !== undefined && texture.format !== 6407 ? WEBGL_TEXTURE_FORMATS[ texture.format ] : THREE.RGBAFormat;
 
 							if ( texture.internalFormat !== undefined && _texture.format !== WEBGL_TEXTURE_FORMATS[ texture.internalFormat ] ) {
 

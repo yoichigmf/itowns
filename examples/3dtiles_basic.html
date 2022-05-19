@@ -45,43 +45,51 @@
 
             // Create a new Layer 3d-tiles For DiscreteLOD
             // -------------------------------------------
-            var $3dTilesLayerDiscreteLOD = new itowns.C3DTilesLayer('3d-tiles-discrete-lod', {
-                name: 'DiscreteLOD',
-                sseThreshold: 0.05,
-                source: new itowns.C3DTilesSource({
-                    url: 'https://raw.githubusercontent.com/CesiumGS/3d-tiles-samples/master/1.0/TilesetWithDiscreteLOD/tileset.json',
-                }),
-            }, view);
+            // var $3dTilesLayerDiscreteLOD = new itowns.C3DTilesLayer('3d-tiles-discrete-lod', {
+            //     name: 'DiscreteLOD',
+            //     sseThreshold: 0.05,
+            //     source: new itowns.C3DTilesSource({
+            //         url: 'https://raw.githubusercontent.com/CesiumGS/3d-tiles-samples/master/1.0/TilesetWithDiscreteLOD/tileset.json',
+            //     }),
+            // }, view);
 
-            itowns.View.prototype.addLayer.call(view, $3dTilesLayerDiscreteLOD);
+            // itowns.View.prototype.addLayer.call(view, $3dTilesLayerDiscreteLOD);
 
             // Create a new Layer 3d-tiles For Viewer Request Volume
             // -----------------------------------------------------
 
+            // This 3D Tiles tileset uses the draco compression that is an
+            // extension of gltf. We need to enable it.
+            itowns.enableDracoLoader('./libs/draco/');
+
             var $3dTilesLayerRequestVolume = new itowns.C3DTilesLayer('3d-tiles-request-volume', {
                 name: 'RequestVolume',
                 source: new itowns.C3DTilesSource({
-                    url: 'https://raw.githubusercontent.com/CesiumGS/3d-tiles-samples/master/1.0/TilesetWithRequestVolume/tileset.json',
+                    url: 'https://3d.strasbourg.eu/CESIUM/DATA/PM3D_2018/3DTiles/EMS_CESIUM.json',
+                    // url: 'http://data-query-files-http.dev.ciril.lan/Lille/3dtilesv1/tileset.json'
+                    // url: 'https://dev.business-geografic.com/donnees-mel-3d/mel3d/tileset.json',
+                    // url: 'http://bg-scsp-3d.ciril.lan/3dtiles/BatiD_en_3DTiles_V1/V2/004/004/data/tileset.json'
+                    // url: 'http://bg-test-soft-3d-fn.ciril.lan/3dtiles-b3dm-japon/13101_chiyoda-ku/tileset.json',
                 }),
-                sseThreshold: 1,
+                overrideMaterials: true,
             }, view);
-
+            
+            itowns.View.prototype.addLayer.call(view, $3dTilesLayerRequestVolume);
             // add an event for picking the 3D Tiles layer and displaying
             // information about the picked feature in an html div
-            var pickingArgs = {};
-            pickingArgs.htmlDiv = document.getElementById('featureInfo');
-            pickingArgs.view = view;
-            pickingArgs.layer = $3dTilesLayerRequestVolume;
-            itowns.View.prototype.addLayer.call(view,
-                $3dTilesLayerRequestVolume).then(function _() {
-                    window.addEventListener('mousemove',
-                        (event) => fillHTMLWithPickingInfo(event, pickingArgs),false);
-                });
+            // var pickingArgs = {};
+            // pickingArgs.htmlDiv = document.getElementById('featureInfo');
+            // pickingArgs.view = view;
+            // pickingArgs.layer = $3dTilesLayerRequestVolume;
+            // itowns.View.prototype.addLayer.call(view,
+            //     $3dTilesLayerRequestVolume).then(function _() {
+            //         window.addEventListener('mousemove',
+            //             (event) => fillHTMLWithPickingInfo(event, pickingArgs),false);
+            //     });
 
             // Add the UI Debug
             var d = new debug.Debug(view, menuGlobe.gui);
             debug.createTileDebugUI(menuGlobe.gui, view, view.tileLayer, d);
-            debug.create3dTilesDebugUI(menuGlobe.gui, view, $3dTilesLayerDiscreteLOD, d);
             debug.create3dTilesDebugUI(menuGlobe.gui, view, $3dTilesLayerRequestVolume, d);
             d.zoom = function() {
                 view.camera.camera3D.position.set(1215013.9, -4736315.5, 4081597.5);

@@ -189,7 +189,25 @@ export default {
                                         material.dispose();
                                     }
                                 } else {
-                                    mesh.material.dispose();
+                                    // TODO private function findTextureUniform
+                                    const uniforms = mesh.material.uniforms;
+                                    let texture = null;
+                                    for (const uName in uniforms) {
+                                        if (!Object.prototype.hasOwnProperty.call(uniforms, uName)) {
+                                            continue;
+                                        }
+                                        if (uniforms[uName].value.isTexture) {
+                                            texture = uniforms[uName].value;
+                                        }
+                                    }
+                                    if (texture) {
+                                        mesh.material = new THREE.MeshBasicMaterial({
+                                            map: texture,
+                                        });
+                                    } else {
+                                        mesh.material = new THREE.MeshBasicMaterial();
+                                    }
+                                    // mesh.material.dispose();
                                 }
                                 if (typeof (options.overrideMaterials) === 'object' &&
                                     options.overrideMaterials.isMaterial) {
